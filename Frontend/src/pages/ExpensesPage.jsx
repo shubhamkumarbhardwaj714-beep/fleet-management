@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import expenseService from '../services/expenseService';
 import vehicleService from '../services/vehicleService';
 import driverService from '../services/driverService';
@@ -29,7 +29,7 @@ export default function ExpensesPage() {
     receiptUrl: '',
   });
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const expenseList = await expenseService.getExpenses();
@@ -47,11 +47,11 @@ export default function ExpensesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

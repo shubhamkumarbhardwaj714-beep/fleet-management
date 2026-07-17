@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import maintenanceService from '../services/maintenanceService';
 import vehicleService from '../services/vehicleService';
 import useAuth from '../hooks/useAuth';
@@ -25,7 +25,7 @@ export default function MaintenancePage() {
     status: 'Scheduled',
   });
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -41,11 +41,11 @@ export default function MaintenancePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     loadData();
-  }, [user?.role]);
+  }, [loadData]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

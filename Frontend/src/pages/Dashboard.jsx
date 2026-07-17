@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaCalendarCheck,
@@ -75,7 +75,7 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -102,11 +102,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isDriver, isMechanic]);
 
   useEffect(() => {
     loadData();
-  }, [user?.role]);
+  }, [loadData]);
 
   const insights = useMemo(() => {
     const openMaintenance = activity.maintenance.filter((item) => !['Completed', 'Cancelled'].includes(item.status));
